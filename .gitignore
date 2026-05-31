@@ -1,0 +1,18 @@
+# Secrets
+.env
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Flask
+instance/
+*.db
+
+# Frontend
+node_modules/
+dist/
+
+# VS Code
+.vscode/

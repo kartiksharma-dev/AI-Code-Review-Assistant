@@ -1,0 +1,115 @@
+======================================================================
+                 AI CODE REVIEW ASSISTANT
+======================================================================
+                     PROJECT DOCUMENTATION
+======================================================================
+
+1. EXECUTIVE SUMMARY
+----------------------------------------------------------------------
+The AI Code Review Assistant is an enterprise-grade, interactive 
+engineering tool designed to act as a senior-level pair programmer. 
+Unlike traditional static analyzers, this system combines abstract 
+syntax tree (AST) validation with generative AI models (Google Gemini) 
+to provide context-aware, structural, and complexity-aware explanations 
+for code improvements. It bridges the gap between passive code linting 
+and active, autonomous code refactoring.
+
+
+2. SYSTEM ARCHITECTURE
+----------------------------------------------------------------------
+The platform follows a decoupled, modern architecture:
+
+* FRONTEND: A React.js application utilizing Vite for rapid compilation. 
+  It features a deeply integrated Monaco Editor (the core engine behind 
+  VS Code) for a native IDE experience. State management is handled by 
+  Zustand, ensuring a strict, centralized state machine for API calls 
+  and UI transitions.
+
+* BACKEND: A Python Flask RESTful API acting as the orchestrator. It 
+  manages database interactions (SQLite via SQLAlchemy), user 
+  authentication (JWT), and the core AI intelligence layer. The backend 
+  securely interfaces with the Google Gemini API to analyze raw code 
+  and generate structured refactoring payloads.
+
+
+3. CORE FEATURES & CAPABILITIES
+----------------------------------------------------------------------
+A. Diff Highlight Intelligence (Phase 10)
+Instead of returning a block of generated code, the AI acts as an 
+engineering mentor. When an optimization is suggested, it provides:
+- Mathematical Complexity Impact (e.g., Time complexity improved 
+  from O(n^2) to O(n)).
+- Semantic Impact Tags (e.g., Performance, Security, Best Practice).
+- Line-Level Logical Reasoning (bullet points explaining exactly why 
+  a specific line was altered).
+
+B. Autonomous Auto-Fix & Monaco Integration
+Users can click a "Preview Fix" button to open a split-pane Diff Editor. 
+The system visually highlights exact insertions and deletions. The 
+editor is enhanced with custom Python IntelliSense (autocomplete 
+keywords and code snippets) to match the standard VS Code experience.
+
+C. Guest Session Isolation & Workspace Rehydration
+The system strictly segregates unauthenticated users from logged-in 
+users. Guest data is securely written to temporary `sessionStorage` 
+and aggressively purged upon logout or page transitions. Authenticated 
+users persist their analysis history securely in the backend database.
+
+D. Code History & Metrics Tracking
+Every successful review is logged. Users have a dedicated History 
+Dashboard where they can review past analyses. The frontend employs 
+optimistic UI updates, allowing users to delete history records 
+instantly without waiting for backend confirmation or page reloads.
+
+
+4. SAFETY & INTEGRITY LAYERS
+----------------------------------------------------------------------
+Generative AI can hallucinate. This platform implements strict 
+resilience layers to protect the user's codebase:
+
+* Syntax Validation Pre-flight: Before any AI suggestion is allowed to 
+  be applied, the backend actively parses the generated code using Python's 
+  AST (Abstract Syntax Tree) module. If the AI returns malformed syntax, 
+  the Auto-Fix functionality is violently blocked.
+
+* Semantic Drift Detection: The system compares the original code to 
+  the AI's generated code. If the AI accidentally removes critical 
+  control flow (e.g., deleting an 'if' statement, removing a 'try/except' 
+  block, or changing function return paths), the system flags the 
+  change as "High Risk Semantic Drift" and downgrades the Auto-Fix into 
+  a read-only informational warning.
+
+* Snapshot Rollback Engine: Every applied fix creates a localized 
+  snapshot timeline. If an AI refactor breaks the user's logic, the 
+  user can instantly rollback the specific change via the UI without 
+  relying on standard 'Ctrl+Z'.
+
+
+5. TECHNOLOGY STACK
+----------------------------------------------------------------------
+Frontend:
+- React 18
+- Vite
+- Zustand (State Management)
+- Tailwind CSS (Styling)
+- Monaco Editor (Code editing and Diff views)
+- Lucide React (Iconography)
+- Axios (API Client)
+
+Backend:
+- Python 3.10+
+- Flask (Web Framework)
+- Flask-SQLAlchemy (ORM)
+- PyJWT (Authentication)
+- Google Generative AI API (Gemini-1.5-Flash)
+- AST (Python Abstract Syntax Trees for validation)
+
+
+6. CONCLUSION
+----------------------------------------------------------------------
+The AI Code Review Assistant is a hardened, intelligent application 
+built for reliability. By forcing the AI to scientifically justify 
+its refactors (Diff Intelligence) and chaining its output through 
+aggressive safety mechanisms (Semantic Drift & AST Validation), the 
+project serves as a highly scalable, safe, and professional engineering 
+assistant.

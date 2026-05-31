@@ -1,0 +1,54 @@
+PROJECT TITLE: AI Code Review Assistant
+================================================================================
+
+1. EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+The AI Code Review Assistant is an enterprise-grade, web-based engineering tool designed to act as an interactive senior developer. It goes beyond simple code generation by offering structural, complexity-aware explanations for code changes, enforcing syntax validity, and providing a highly interactive, intelligent code editor experience right in the browser.
+
+
+2. CORE TECHNOLOGY STACK
+--------------------------------------------------------------------------------
+Frontend:
+- Framework: React.js (via Vite for lightning-fast HMR)
+- Styling: TailwindCSS (for custom, responsive, utility-based UI)
+- State Management: Zustand (used for atomic, highly resilient state caching)
+- Editor Engine: Monaco Editor (powers the VS Code-like experience)
+- Routing: React Router v6
+
+Backend:
+- Framework: Python Flask (REST API)
+- AI Engine: Google Gemini API (orchestrated via a custom AI validation layer)
+- Database: SQLite with SQLAlchemy ORM
+- Security: JWT (JSON Web Tokens) for authentication and CORS policies
+
+
+3. KEY FEATURES & CAPABILITIES
+--------------------------------------------------------------------------------
+
+A. Editor & IntelliSense Intelligence
+The application integrates the Monaco Editor to provide a native, IDE-like experience in the browser. It features custom-registered Python IntelliSense, offering real-time autocomplete for Python keywords (print, def, class, etc.) and intelligent code snippets (such as inserting fully formatted for-loops and try/except blocks), allowing developers to write code fluidly without leaving the platform.
+
+B. Diff Highlight Intelligence (Phase 10)
+When the AI detects inefficient code, it generates structured JSON responses rather than plain text. This powers an advanced "Preview Fix" modal that visually breaks down:
+- The exact Semantic Impact Type (Performance, Readability, Security).
+- A Time/Space Complexity Table showing the exact algorithmic improvement (e.g., O(n^2) changing to O(n)).
+- A bulleted "Logical Adjustments" list explaining exactly why the AI decided to remove or change specific lines of code.
+
+C. Semantic Drift Detection & Safety (Phase 8 & 9)
+AI-generated code is never blindly trusted. The backend passes all AI suggestions through an AST (Abstract Syntax Tree) validator to ensure the new code will compile. Furthermore, a Semantic Drift layer ensures the AI didn't accidentally delete crucial business logic or security validations. If semantic drift is detected, the UI automatically downgrades the fix to an "Informational Warning" and disables the auto-apply feature to protect the user's software.
+
+D. Strict Session Management & History
+The application implements rigid boundaries between persistent authenticated users and temporary guest users:
+- Guest Mode: Operates entirely inside a volatile sandbox using sessionStorage. Once the user closes the tab or navigates away, the data is vaporized to protect code privacy.
+- Authenticated Users: Logged-in users securely save their code analysis history to the backend database. 
+- History Interface: Users can browse past analyses and utilize the "Delete" capability, which uses optimistic UI rendering to instantly wipe items off the screen without forcing a page reload.
+
+
+4. SYSTEM RESILIENCE & ERROR HANDLING
+--------------------------------------------------------------------------------
+The platform utilizes a state-machine architecture (idle -> analyzing -> generating -> safe/failed). This guarantees that network timeouts, invalid AI responses, or unexpected disconnects never crash the UI. Instead, the user is presented with non-intrusive, color-coded error banners and recoverable "Retry" options, all without losing their current code or editor progress.
+
+
+5. CONCLUSION
+--------------------------------------------------------------------------------
+The AI Code Review Assistant represents a modern approach to AI-assisted software development. By prioritizing syntax safety, algorithmic transparency, and strict session isolation, it provides developers with a trustworthy, lightning-fast environment to optimize and refactor their codebases.
